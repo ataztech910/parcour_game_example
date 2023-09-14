@@ -36,7 +36,6 @@ class PlayGame extends Phaser.Scene {
     this.players = [];
 
     this.input.keyboard.on('keydown', function(key) {
-      console.log('up', key);
       if(key.code === 'ArrowUp') {
         myPlayer().setState("ctr-jump", true);
       }
@@ -50,10 +49,14 @@ class PlayGame extends Phaser.Scene {
       }
     });
 
-    this.input.keyboard.on('keyup', function() {
-      myPlayer().setState("ctr-dpad", undefined);
-      myPlayer().setState("ctr-joystick", undefined);
-      myPlayer().setState("ctr-jump", undefined);
+    this.input.keyboard.on('keyup', function(key) {
+      if(key.code === 'ArrowLeft' || key.code === 'ArrowRight') {
+        myPlayer().setState("ctr-dpad", undefined);
+        myPlayer().setState("ctr-joystick", undefined);
+      }
+      if(key.code === 'ArrowUp') {
+        myPlayer().setState("ctr-jump", undefined);
+      }
     });
 
     onPlayerJoin(async (player) => {
@@ -63,6 +66,10 @@ class PlayGame extends Phaser.Scene {
           { id: "jump", label: "JUMP" }
         ]
       });
+      const isMobile = navigator.userAgentData.mobile;
+      if (!isMobile) {
+        document.querySelectorAll("[style*='user-select']").forEach(e=>e.style.display='none');
+      }
       const hero = new Player(
         this,
         this.layer,
@@ -80,7 +87,6 @@ class PlayGame extends Phaser.Scene {
   }
 
   update() {
-    // console.log(myPlayer().getState('ctr-joystick'));
     this.players.forEach(({ player, hero }) => {
       if (isHost()) {
         hero.update();
