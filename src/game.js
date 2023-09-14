@@ -66,10 +66,12 @@ class PlayGame extends Phaser.Scene {
           { id: "jump", label: "JUMP" }
         ]
       });
-      const isMobile = navigator.userAgentData.mobile;
+
+      const isMobile = navigator?.userAgentData?.mobile;
       if (!isMobile) {
         document.querySelectorAll("[style*='user-select']").forEach(e=>e.style.display='none');
       }
+
       const hero = new Player(
         this,
         this.layer,
