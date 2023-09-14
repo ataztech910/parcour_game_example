@@ -2,7 +2,8 @@
   "name": "playroom-2dplatformer",
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite --host"
+    "dev": "vite --host",
+    "build": "vite build"
   },
   "dependencies": {
     "phaser": "^3.60.0",

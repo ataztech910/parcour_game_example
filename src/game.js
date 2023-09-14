@@ -35,22 +35,43 @@ class PlayGame extends Phaser.Scene {
     // players and their controllers
     this.players = [];
 
+    this.input.keyboard.on('keydown', function(key) {
+      console.log('up', key);
+      if(key.code === 'ArrowUp') {
+        myPlayer().setState("ctr-jump", true);
+      }
+      if(key.code === 'ArrowLeft') {
+        myPlayer().setState("ctr-dpad", {x: 'left', y: 'up'});
+        myPlayer().setState("ctr-joystick", true);
+      }
+      if(key.code === 'ArrowRight') {
+        myPlayer().setState("ctr-dpad", {x: 'right', y: 'down'});
+        myPlayer().setState("ctr-joystick", true);
+      }
+    });
+
+    this.input.keyboard.on('keyup', function() {
+      myPlayer().setState("ctr-dpad", undefined);
+      myPlayer().setState("ctr-joystick", undefined);
+      myPlayer().setState("ctr-jump", undefined);
+    });
+
     onPlayerJoin(async (player) => {
-      // const joystick = new Joystick(player, {
-      //   type: "dpad",
-      //   buttons: [
-      //     { id: "jump", label: "JUMP" }
-      //   ]
-      // });
-      
+      const joystick = new Joystick(player, {
+        type: "dpad",
+        buttons: [
+          { id: "jump", label: "JUMP" }
+        ]
+      });
       const hero = new Player(
         this,
         this.layer,
         this.cameras.main.width / 2 + (this.players.length * 20),
         440,
-        player.getProfile().color.hex, this.input.keyboard.createCursorKeys());
+        player.getProfile().color.hex,
+        joystick);
 
-      this.players.push({ player, hero });
+      this.players.push({ player, hero, joystick });
       player.onQuit(() => {
         this.players = this.players.filter(({ player: _player }) => _player !== player);
         hero.destroy();
@@ -59,6 +80,7 @@ class PlayGame extends Phaser.Scene {
   }
 
   update() {
+    // console.log(myPlayer().getState('ctr-joystick'));
     this.players.forEach(({ player, hero }) => {
       if (isHost()) {
         hero.update();

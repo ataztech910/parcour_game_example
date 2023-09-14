@@ -103,7 +103,6 @@ export default class Player {
   }
 
   update() {
-    // console.log(this.joystick);
     // hero on the ground
     if (this.hero.body.blocked.down) {
       // hero can jump
@@ -171,7 +170,7 @@ export default class Player {
   }
 
   spaceInputIsActive(duration) {
-    if (!this.jumpKeyIsDown && this.joystick.up.isDown) {
+    if (!this.jumpKeyIsDown && this.joystick.isPressed("jump")) {
       this.jumpKeyIsDown = true;
       this.jumpKeyDownAt = Date.now();
     }
@@ -179,7 +178,7 @@ export default class Player {
   }
 
   spaceInputReleased() {
-    if (!this.joystick.up.isDown) {
+    if (!this.joystick.isPressed("jump")) {
       this.jumpKeyIsDown = false;
       return true;
     }
@@ -187,10 +186,10 @@ export default class Player {
   }
 
   rightInputIsActive() {
-    return this.joystick.right.isDown;
+    return this.joystick.dpad().x === "right";
   }
 
   leftInputIsActive() {
-    return this.joystick.left.isDown;
+    return this.joystick.dpad().x === "left";
   }
 }
