@@ -68,7 +68,7 @@ class PlayGame extends Phaser.Scene {
       });
       const isMobile = navigator.userAgentData.mobile;
       if (!isMobile) {
-        // document.querySelectorAll("[style*='user-select']").forEach(e=>e.style.display='none');
+        document.querySelectorAll("[style*='user-select']").forEach(e=>e.style.display='none');
       }
       const hero = new Player(
         this,
